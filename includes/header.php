@@ -33,7 +33,7 @@ $current_script = ($page_id === 'home') ? 'index.php' : ($page_id . '.php');
     <meta name="description" content="Official portfolio of Jairus John Valdez — Computer Science Student, Systems Developer, and Security Enthusiast.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -42,9 +42,10 @@ $current_script = ($page_id === 'home') ? 'index.php' : ($page_id . '.php');
 
     <header class="site-header">
         <div class="container navbar">
-            <a href="index.php" class="logo" aria-label="Jairus Valdez - Home">
-                <span class="logo-badge" aria-hidden="true">&lt;JV /&gt;</span>
-                <span>Jairus Valdez</span>
+            <a href="index.php" class="brand-monogram" aria-label="Jairus Valdez - Home">
+                <span class="status-pip" aria-hidden="true"></span>
+                <span>VALDEZ.SYS</span>
+                <span class="version-tag">v2.6.4</span>
             </a>
 
             <button class="mobile-toggle" 
@@ -83,6 +84,11 @@ $current_script = ($page_id === 'home') ? 'index.php' : ($page_id . '.php');
                             <span class="nav-link-icon">✉️</span>
                             <span>Contact</span>
                         </a>
+                    </li>
+                    <li>
+                        <button type="button" class="nav-btn-telemetry js-system-modal-trigger" aria-haspopup="dialog" aria-label="Open System Architecture and Telemetry Console">
+                            <span>⚡ Telemetry</span>
+                        </button>
                     </li>
                     <?php if (is_logged_in()): ?>
                         <li class="nav-divider"></li>

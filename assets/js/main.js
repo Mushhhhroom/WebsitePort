@@ -350,4 +350,75 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // 7. System Telemetry Modal Controller (Native <dialog> with Accessible Controls)
+    const systemModal = document.getElementById('systemModal');
+    const closeSystemModalBtn = document.getElementById('closeSystemModalBtn');
+    const dismissSystemModalBtn = document.getElementById('dismissSystemModalBtn');
+    const systemModalTriggers = document.querySelectorAll('.js-system-modal-trigger');
+
+    let previousActiveElement = null;
+
+    function openSystemModal() {
+        if (!systemModal) return;
+        previousActiveElement = document.activeElement;
+
+        if (typeof systemModal.showModal === 'function') {
+            systemModal.showModal();
+        } else {
+            systemModal.setAttribute('open', '');
+        }
+
+        if (closeSystemModalBtn) {
+            closeSystemModalBtn.focus();
+        }
+    }
+
+    function closeSystemModal() {
+        if (!systemModal) return;
+
+        if (typeof systemModal.close === 'function') {
+            systemModal.close();
+        } else {
+            systemModal.removeAttribute('open');
+        }
+
+        if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+            previousActiveElement.focus();
+        }
+    }
+
+    if (systemModalTriggers.length > 0) {
+        systemModalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                openSystemModal();
+            });
+        });
+    }
+
+    if (closeSystemModalBtn) {
+        closeSystemModalBtn.addEventListener('click', closeSystemModal);
+    }
+
+    if (dismissSystemModalBtn) {
+        dismissSystemModalBtn.addEventListener('click', closeSystemModal);
+    }
+
+    if (systemModal) {
+        // Close when clicking outside dialog-frame (on backdrop)
+        systemModal.addEventListener('click', (e) => {
+            if (e.target === systemModal) {
+                closeSystemModal();
+            }
+        });
+
+        // Close on ESC key fallback
+        systemModal.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSystemModal();
+            }
+        });
+    }
 });
+

@@ -22,6 +22,7 @@
                     <li><a href="terms.php">Terms</a></li>
                     <li><a href="cookies.php">Cookies</a></li>
                     <li><button type="button" class="footer-btn-link js-cookie-settings-trigger" id="openCookieSettingsBtn" aria-haspopup="dialog">Cookie Preferences</button></li>
+                    <li><button type="button" class="footer-btn-link js-system-modal-trigger" aria-haspopup="dialog">⚡ System Telemetry</button></li>
                     <li><a href="contact.php">Contact</a></li>
                     <li><a href="login.php">Admin Portal</a></li>
                 </ul>
@@ -31,6 +32,9 @@
 
     <!-- Cookie Consent Banner & Preferences Modal Component -->
     <?php require_once __DIR__ . '/cookie_banner.php'; ?>
+
+    <!-- System Telemetry Modal Component -->
+    <?php require_once __DIR__ . '/system_modal.php'; ?>
 
     <!-- Mobile Floating Bottom App Dock (Visible on Mobile Screens Only) -->
     <nav class="mobile-dock" aria-label="Quick Mobile Navigation">

@@ -32,12 +32,9 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 <div class="hero">
     <div class="container">
         <div class="hero-content">
-            <div class="hero-kicker">
-                <span class="pulse-indicator">
-                    <span class="ping-ring"></span>
-                    <span class="dot"></span>
-                </span>
-                <span>Open for Technical Roles &amp; Opportunities</span>
+            <div class="technical-chip">
+                <span class="pulsing-node" aria-hidden="true"></span>
+                <span>SYSTEM CONSOLE // 4TH YEAR BSCS LEAD ENGINEER</span>
             </div>
             
             <h1 class="hero-title">
@@ -56,9 +53,9 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
                 <a href="about.php" class="btn btn-outline">
                     <span>Resume &amp; Experience</span>
                 </a>
-                <a href="contact.php" class="btn btn-outline">
-                    <span>Get in Touch</span>
-                </a>
+                <button type="button" class="btn btn-outline js-system-modal-trigger" aria-haspopup="dialog">
+                    <span>⚡ Telemetry Console</span>
+                </button>
             </div>
 
             <div class="hero-quick-links">
@@ -76,22 +73,41 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
                 </span>
             </div>
 
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-num">4th Year</div>
-                    <div class="stat-label">BS Computer Science (QCU)</div>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Database Cluster</span>
+                        <span class="badge-status badge-sync">HYBRID DUAL-SYNC</span>
+                    </div>
+                    <div class="metric-value">Supabase + MySQL</div>
+                    <div class="metric-sub">Auto-sync &bull; Zero schema drift</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-num">Full-Stack</div>
-                    <div class="stat-label">Web, Mobile &amp; Desktop</div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Security &amp; Auth</span>
+                        <span class="badge-status badge-online">OWASP AA</span>
+                    </div>
+                    <div class="metric-value">Stateless HMAC-SHA256</div>
+                    <div class="metric-sub">CSRF double-submit &bull; XSS escaped</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-num">JPCS</div>
-                    <div class="stat-label">Board of Programmer Officer</div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Edge Network</span>
+                        <span class="badge-status badge-online">VERCEL EDGE</span>
+                    </div>
+                    <div class="metric-value">Global Serverless</div>
+                    <div class="metric-sub">iad1 Washington D.C. Node</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-num">Multi-DB</div>
-                    <div class="stat-label">MySQL, MongoDB &amp; Supabase</div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-label">Role &amp; Leadership</span>
+                        <span class="badge-status badge-sync">JPCS OFFICER</span>
+                    </div>
+                    <div class="metric-value">Board of Programmers</div>
+                    <div class="metric-sub">QCU &bull; 4th Year BSCS</div>
                 </div>
             </div>
         </div>
