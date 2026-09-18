@@ -23,6 +23,37 @@
         </div>
     </footer>
 
+    <!-- Mobile Floating Bottom App Dock (Visible on Mobile Screens Only) -->
+    <nav class="mobile-dock" aria-label="Quick Mobile Navigation">
+        <a href="index.php" class="dock-item <?php echo $current_script === 'index.php' ? 'active' : ''; ?>">
+            <span class="dock-icon">🏠</span>
+            <span class="dock-label">Home</span>
+        </a>
+        <a href="about.php" class="dock-item <?php echo $current_script === 'about.php' ? 'active' : ''; ?>">
+            <span class="dock-icon">📄</span>
+            <span class="dock-label">Resume</span>
+        </a>
+        <a href="projects.php" class="dock-item <?php echo $current_script === 'projects.php' ? 'active' : ''; ?>">
+            <span class="dock-icon">💻</span>
+            <span class="dock-label">Projects</span>
+        </a>
+        <a href="contact.php" class="dock-item <?php echo $current_script === 'contact.php' ? 'active' : ''; ?>">
+            <span class="dock-icon">✉️</span>
+            <span class="dock-label">Contact</span>
+        </a>
+        <?php if (is_logged_in()): ?>
+            <a href="dashboard.php" class="dock-item <?php echo $current_script === 'dashboard.php' ? 'active' : ''; ?>">
+                <span class="dock-icon">⚙️</span>
+                <span class="dock-label">Admin</span>
+            </a>
+        <?php else: ?>
+            <a href="login.php" class="dock-item <?php echo $current_script === 'login.php' ? 'active' : ''; ?>">
+                <span class="dock-icon">🔒</span>
+                <span class="dock-label">Admin</span>
+            </a>
+        <?php endif; ?>
+    </nav>
+
     <script src="assets/js/main.js"></script>
 </body>
 </html>

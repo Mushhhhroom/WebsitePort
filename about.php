@@ -35,33 +35,30 @@ foreach ($all_resume as $item) {
 <div class="section">
     <div class="container">
         <!-- Profile Banner -->
-        <div style="background: var(--gradient-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px; margin-bottom: 50px;">
-            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+        <div class="profile-banner">
+            <div class="banner-layout">
+                <div class="banner-info">
                     <span class="tag-badge tag-badge-green" style="margin-bottom: 12px;">Fourth-Year BS Computer Science &bull; QCU</span>
-                    <h1 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 6px;">
+                    <h1 class="banner-name">
                         <?php echo e($profile['full_name'] ?? 'Jairus John D. Valdez'); ?>
                     </h1>
-                    <p style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
+                    <p class="banner-headline">
                         <?php echo e($profile['headline'] ?? 'Fourth-Year BS Computer Science Student | Website, Application & Mobile Developer'); ?>
                     </p>
-                    <p style="color: var(--text-secondary); max-width: 750px; line-height: 1.7; margin-bottom: 16px;">
+                    <p class="banner-bio">
                         <?php echo e($profile['bio'] ?? ''); ?>
                     </p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-mono);">
-                        <span>📍 Caloocan City, PH</span>
-                        <span>&bull;</span>
-                        <a href="tel:+639497844287" style="color: var(--accent-cyan);">📞 +63 949 784 4287</a>
-                        <span>&bull;</span>
-                        <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" style="color: var(--accent-cyan);">✉️ Valdez.jairusjohn.deleste@gmail.com</a>
-                        <span>&bull;</span>
-                        <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" style="color: var(--text-primary);">💻 GitHub</a>
-                        <span>&bull;</span>
-                        <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" style="color: var(--text-primary);">💼 LinkedIn</a>
+                    <div class="contact-chips">
+                        <span class="chip-item">📍 Caloocan City, PH</span>
+                        <a href="tel:+639497844287" class="chip-item chip-link">📞 +63 949 784 4287</a>
+                        <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" class="chip-item chip-link">✉️ Valdez.jairusjohn.deleste@gmail.com</a>
+                        <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" class="chip-item chip-link">💻 GitHub</a>
+                        <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" class="chip-item chip-link">💼 LinkedIn</a>
                     </div>
                 </div>
-                <div>
-                    <a href="contact.php" class="btn btn-primary">Contact Me</a>
-                    <button onclick="window.print()" class="btn btn-outline" style="margin-top: 10px; width: 100%;">
+                <div class="banner-actions">
+                    <a href="contact.php" class="btn btn-primary btn-banner">Contact Me</a>
+                    <button onclick="window.print()" class="btn btn-outline btn-banner">
                         🖨️ Print / Save PDF
                     </button>
                 </div>

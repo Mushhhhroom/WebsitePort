@@ -28,40 +28,61 @@ $current_script = basename($_SERVER['PHP_SELF']);
                 <span>Jairus Valdez</span>
             </a>
 
-            <button class="mobile-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
 
-            <nav>
-                <ul class="nav-links">
+            <nav class="nav-container" id="navContainer">
+                <ul class="nav-links" id="navLinks">
                     <li>
-                        <a href="index.php" class="nav-link <?php echo $current_script === 'index.php' ? 'active' : ''; ?>">Home</a>
+                        <a href="index.php" class="nav-link <?php echo $current_script === 'index.php' ? 'active' : ''; ?>">
+                            <span class="nav-link-icon">🏠</span>
+                            <span>Home</span>
+                        </a>
                     </li>
                     <li>
-                        <a href="about.php" class="nav-link <?php echo $current_script === 'about.php' ? 'active' : ''; ?>">About & Resume</a>
+                        <a href="about.php" class="nav-link <?php echo $current_script === 'about.php' ? 'active' : ''; ?>">
+                            <span class="nav-link-icon">📄</span>
+                            <span>About &amp; Resume</span>
+                        </a>
                     </li>
                     <li>
-                        <a href="projects.php" class="nav-link <?php echo $current_script === 'projects.php' ? 'active' : ''; ?>">Projects</a>
+                        <a href="projects.php" class="nav-link <?php echo $current_script === 'projects.php' ? 'active' : ''; ?>">
+                            <span class="nav-link-icon">💻</span>
+                            <span>Projects</span>
+                        </a>
                     </li>
                     <li>
-                        <a href="contact.php" class="nav-link <?php echo $current_script === 'contact.php' ? 'active' : ''; ?>">Contact</a>
+                        <a href="contact.php" class="nav-link <?php echo $current_script === 'contact.php' ? 'active' : ''; ?>">
+                            <span class="nav-link-icon">✉️</span>
+                            <span>Contact</span>
+                        </a>
                     </li>
                     <?php if (is_logged_in()): ?>
+                        <li class="nav-divider"></li>
                         <li>
                             <a href="dashboard.php" class="nav-btn-admin <?php echo $current_script === 'dashboard.php' ? 'active' : ''; ?>">
-                                ⚙ Dashboard
+                                <span>⚙ Dashboard</span>
                             </a>
                         </li>
                         <li>
-                            <a href="logout.php" class="nav-link" style="color: #f87171;" title="Log Out">Logout</a>
+                            <a href="logout.php" class="nav-link nav-link-logout" title="Log Out">
+                                <span>Logout 🚪</span>
+                            </a>
                         </li>
                     <?php else: ?>
+                        <li class="nav-divider"></li>
                         <li>
                             <a href="login.php" class="nav-btn-admin <?php echo $current_script === 'login.php' ? 'active' : ''; ?>">
-                                🔒 Admin
+                                <span>🔒 Admin Portal</span>
                             </a>
                         </li>
                     <?php endif; ?>
                 </ul>
             </nav>
         </div>
+        <div class="nav-backdrop" id="navBackdrop"></div>
     </header>
     <main>

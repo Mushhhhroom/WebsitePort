@@ -1,23 +1,78 @@
 /**
- * Portfolio Client-Side Logic & Interactivity
+ * Enhanced Portfolio Client-Side Logic & Mobile Interactivity
  * Jairus John Valdez - Computer Science Portfolio
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Mobile Menu Toggle
-    const mobileToggle = document.querySelector('.mobile-toggle');
-    const navLinks = document.querySelector('.nav-links');
+    // 1. Mobile Drawer Navigation & Backdrop Controls
+    const mobileToggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-toggle');
+    const navContainer = document.getElementById('navContainer') || document.querySelector('.nav-container');
+    const navBackdrop = document.getElementById('navBackdrop') || document.querySelector('.nav-backdrop');
+    const navLinks = document.querySelectorAll('.nav-link, .nav-btn-admin');
+    const siteHeader = document.querySelector('.site-header');
 
-    if (mobileToggle && navLinks) {
-        mobileToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('open');
-            const isOpen = navLinks.classList.contains('open');
-            mobileToggle.setAttribute('aria-expanded', isOpen);
-            mobileToggle.innerHTML = isOpen ? '✕' : '☰';
+    function openMobileMenu() {
+        if (!mobileToggle || !navContainer) return;
+        mobileToggle.classList.add('is-active');
+        mobileToggle.setAttribute('aria-expanded', 'true');
+        navContainer.classList.add('is-open');
+        if (navBackdrop) navBackdrop.classList.add('is-visible');
+        document.body.classList.add('menu-open');
+    }
+
+    function closeMobileMenu() {
+        if (!mobileToggle || !navContainer) return;
+        mobileToggle.classList.remove('is-active');
+        mobileToggle.setAttribute('aria-expanded', 'false');
+        navContainer.classList.remove('is-open');
+        if (navBackdrop) navBackdrop.classList.remove('is-visible');
+        document.body.classList.remove('menu-open');
+    }
+
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = mobileToggle.classList.contains('is-active');
+            if (isOpen) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
         });
     }
 
-    // 2. Project Filtering & Instant Search (for projects.php)
+    if (navBackdrop) {
+        navBackdrop.addEventListener('click', closeMobileMenu);
+    }
+
+    // Close mobile menu when clicking any nav link
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                closeMobileMenu();
+            }
+        });
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeMobileMenu();
+        }
+    });
+
+    // 2. Header Scroll Effect (compact glass on scroll)
+    if (siteHeader) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                siteHeader.classList.add('is-scrolled');
+            } else {
+                siteHeader.classList.remove('is-scrolled');
+            }
+        }, { passive: true });
+    }
+
+    // 3. Project Filtering & Instant Search (for projects.php)
     const filterButtons = document.querySelectorAll('.filter-btn');
     const searchInput = document.querySelector('#projectSearch');
     const projectCards = document.querySelectorAll('.project-card');
@@ -27,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedCategory = activeBtn ? activeBtn.getAttribute('data-category').toLowerCase() : 'all';
         const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
+        let visibleCount = 0;
         projectCards.forEach(card => {
             const cardCategory = (card.getAttribute('data-category') || '').toLowerCase();
             const cardTitle = (card.querySelector('.project-title')?.textContent || '').toLowerCase();
@@ -42,17 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (matchesCategory && matchesSearch) {
                 card.style.display = 'flex';
                 card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+                visibleCount++;
             } else {
                 card.style.display = 'none';
                 card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
             }
         });
 
         // Show empty state if no projects match
-        const visibleCards = Array.from(projectCards).filter(c => c.style.display !== 'none');
         const emptyNotice = document.querySelector('#noProjectsNotice');
         if (emptyNotice) {
-            emptyNotice.style.display = visibleCards.length === 0 ? 'block' : 'none';
+            emptyNotice.style.display = visibleCount === 0 ? 'block' : 'none';
         }
     }
 
@@ -70,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('input', filterProjects);
     }
 
-    // 3. Tab Switcher for Dashboard
+    // 4. Tab Switcher for Dashboard
     const tabButtons = document.querySelectorAll('.dashboard-tabs .tab-btn');
     const tabPanels = document.querySelectorAll('.tab-panel');
 
@@ -103,13 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 4. Auto-dismiss alerts after 6 seconds
+    // 5. Auto-dismiss alerts after 6 seconds
     const alerts = document.querySelectorAll('.alert');
     if (alerts.length > 0) {
         setTimeout(() => {
             alerts.forEach(alert => {
-                alert.style.transition = 'opacity 0.5s ease';
+                alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
                 alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-6px)';
                 setTimeout(() => alert.remove(), 500);
             });
         }, 6000);
