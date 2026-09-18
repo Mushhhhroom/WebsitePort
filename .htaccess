@@ -1,0 +1,25 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Specific friendly legal and system alias rewrites
+    RewriteRule ^privacy-policy/?$ privacy.php [L,QSA]
+    RewriteRule ^privacy/?$ privacy.php [L,QSA]
+    RewriteRule ^terms-and-conditions/?$ terms.php [L,QSA]
+    RewriteRule ^terms-of-service/?$ terms.php [L,QSA]
+    RewriteRule ^terms/?$ terms.php [L,QSA]
+    RewriteRule ^cookie-policy/?$ cookies.php [L,QSA]
+    RewriteRule ^cookies/?$ cookies.php [L,QSA]
+
+    # Handle clean URL rewrites to matching .php files if they exist
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^([^\.]+)$ $1.php [L,QSA]
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

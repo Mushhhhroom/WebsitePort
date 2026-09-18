@@ -5,6 +5,8 @@
  * Compliant with GDPR (EU), Data Privacy Act of 2012 (RA 10173, Philippines), and international privacy standards.
  */
 
+$page_id = 'privacy';
+$current_script = 'privacy.php';
 $page_title = 'Privacy Policy | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 ?>

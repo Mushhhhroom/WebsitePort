@@ -4,6 +4,8 @@
  * Portfolio Project - Jairus John Valdez
  */
 
+$page_id = 'terms';
+$current_script = 'terms.php';
 $page_title = 'Terms & Conditions | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 ?>

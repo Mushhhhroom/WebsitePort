@@ -4,6 +4,8 @@
  * Portfolio Project - Jairus John Valdez
  */
 
+$page_id = 'projects';
+$current_script = 'projects.php';
 $page_title = 'Projects Showcase | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 

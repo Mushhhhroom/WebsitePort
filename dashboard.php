@@ -219,6 +219,8 @@ foreach ($messages as $m) {
 
 $sync_diff = get_sync_difference($pdo);
 
+$page_id = 'dashboard';
+$current_script = 'dashboard.php';
 $page_title = 'Admin Dashboard | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 ?>

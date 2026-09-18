@@ -34,29 +34,29 @@
 
     <!-- Mobile Floating Bottom App Dock (Visible on Mobile Screens Only) -->
     <nav class="mobile-dock" aria-label="Quick Mobile Navigation">
-        <a href="index.php" class="dock-item <?php echo $current_script === 'index.php' ? 'active' : ''; ?>">
+        <a href="index.php" class="dock-item <?php echo $page_id === 'home' ? 'active' : ''; ?>" <?php echo $page_id === 'home' ? 'aria-current="page"' : ''; ?>>
             <span class="dock-icon" aria-hidden="true">🏠</span>
             <span class="dock-label">Home</span>
         </a>
-        <a href="about.php" class="dock-item <?php echo $current_script === 'about.php' ? 'active' : ''; ?>">
+        <a href="about.php" class="dock-item <?php echo $page_id === 'about' ? 'active' : ''; ?>" <?php echo $page_id === 'about' ? 'aria-current="page"' : ''; ?>>
             <span class="dock-icon" aria-hidden="true">📄</span>
             <span class="dock-label">Resume</span>
         </a>
-        <a href="projects.php" class="dock-item <?php echo $current_script === 'projects.php' ? 'active' : ''; ?>">
+        <a href="projects.php" class="dock-item <?php echo $page_id === 'projects' ? 'active' : ''; ?>" <?php echo $page_id === 'projects' ? 'aria-current="page"' : ''; ?>>
             <span class="dock-icon" aria-hidden="true">💻</span>
             <span class="dock-label">Projects</span>
         </a>
-        <a href="contact.php" class="dock-item <?php echo $current_script === 'contact.php' ? 'active' : ''; ?>">
+        <a href="contact.php" class="dock-item <?php echo $page_id === 'contact' ? 'active' : ''; ?>" <?php echo $page_id === 'contact' ? 'aria-current="page"' : ''; ?>>
             <span class="dock-icon" aria-hidden="true">✉️</span>
             <span class="dock-label">Contact</span>
         </a>
         <?php if (is_logged_in()): ?>
-            <a href="dashboard.php" class="dock-item <?php echo $current_script === 'dashboard.php' ? 'active' : ''; ?>">
+            <a href="dashboard.php" class="dock-item <?php echo $page_id === 'dashboard' ? 'active' : ''; ?>" <?php echo $page_id === 'dashboard' ? 'aria-current="page"' : ''; ?>>
                 <span class="dock-icon" aria-hidden="true">⚙️</span>
                 <span class="dock-label">Admin</span>
             </a>
         <?php else: ?>
-            <a href="login.php" class="dock-item <?php echo $current_script === 'login.php' ? 'active' : ''; ?>">
+            <a href="login.php" class="dock-item <?php echo $page_id === 'login' ? 'active' : ''; ?>" <?php echo $page_id === 'login' ? 'aria-current="page"' : ''; ?>>
                 <span class="dock-icon" aria-hidden="true">🔒</span>
                 <span class="dock-label">Admin</span>
             </a>

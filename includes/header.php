@@ -8,7 +8,21 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/security.php';
 
 $page_title = $page_title ?? 'Jairus John Valdez | Computer Science Portfolio';
-$current_script = basename($_SERVER['PHP_SELF']);
+
+// Normalize current page identifier across environments (Vercel serverless, Apache, clean URLs)
+if (!isset($page_id) || empty($page_id)) {
+    $uri_path = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? '';
+    $raw_base = basename(trim($uri_path, '/'));
+    $base_clean = preg_replace('/\.php$/i', '', $raw_base);
+
+    if (empty($base_clean) || $base_clean === 'portfolio' || $base_clean === 'index') {
+        $page_id = 'home';
+    } else {
+        $page_id = strtolower($base_clean);
+    }
+}
+
+$current_script = ($page_id === 'home') ? 'index.php' : ($page_id . '.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,25 +61,25 @@ $current_script = basename($_SERVER['PHP_SELF']);
             <nav class="nav-container" id="navContainer">
                 <ul class="nav-links" id="navLinks">
                     <li>
-                        <a href="index.php" class="nav-link <?php echo $current_script === 'index.php' ? 'active' : ''; ?>">
+                        <a href="index.php" class="nav-link <?php echo $page_id === 'home' ? 'active' : ''; ?>" <?php echo $page_id === 'home' ? 'aria-current="page"' : ''; ?>>
                             <span class="nav-link-icon">🏠</span>
                             <span>Home</span>
                         </a>
                     </li>
                     <li>
-                        <a href="about.php" class="nav-link <?php echo $current_script === 'about.php' ? 'active' : ''; ?>">
+                        <a href="about.php" class="nav-link <?php echo $page_id === 'about' ? 'active' : ''; ?>" <?php echo $page_id === 'about' ? 'aria-current="page"' : ''; ?>>
                             <span class="nav-link-icon">📄</span>
                             <span>About &amp; Resume</span>
                         </a>
                     </li>
                     <li>
-                        <a href="projects.php" class="nav-link <?php echo $current_script === 'projects.php' ? 'active' : ''; ?>">
+                        <a href="projects.php" class="nav-link <?php echo $page_id === 'projects' ? 'active' : ''; ?>" <?php echo $page_id === 'projects' ? 'aria-current="page"' : ''; ?>>
                             <span class="nav-link-icon">💻</span>
                             <span>Projects</span>
                         </a>
                     </li>
                     <li>
-                        <a href="contact.php" class="nav-link <?php echo $current_script === 'contact.php' ? 'active' : ''; ?>">
+                        <a href="contact.php" class="nav-link <?php echo $page_id === 'contact' ? 'active' : ''; ?>" <?php echo $page_id === 'contact' ? 'aria-current="page"' : ''; ?>>
                             <span class="nav-link-icon">✉️</span>
                             <span>Contact</span>
                         </a>
@@ -73,7 +87,7 @@ $current_script = basename($_SERVER['PHP_SELF']);
                     <?php if (is_logged_in()): ?>
                         <li class="nav-divider"></li>
                         <li>
-                            <a href="dashboard.php" class="nav-btn-admin <?php echo $current_script === 'dashboard.php' ? 'active' : ''; ?>">
+                            <a href="dashboard.php" class="nav-btn-admin <?php echo $page_id === 'dashboard' ? 'active' : ''; ?>" <?php echo $page_id === 'dashboard' ? 'aria-current="page"' : ''; ?>>
                                 <span>⚙ Dashboard</span>
                             </a>
                         </li>
@@ -85,7 +99,7 @@ $current_script = basename($_SERVER['PHP_SELF']);
                     <?php else: ?>
                         <li class="nav-divider"></li>
                         <li>
-                            <a href="login.php" class="nav-btn-admin <?php echo $current_script === 'login.php' ? 'active' : ''; ?>">
+                            <a href="login.php" class="nav-btn-admin <?php echo $page_id === 'login' ? 'active' : ''; ?>" <?php echo $page_id === 'login' ? 'aria-current="page"' : ''; ?>>
                                 <span>🔒 Admin Portal</span>
                             </a>
                         </li>

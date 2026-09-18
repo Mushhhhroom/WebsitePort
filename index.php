@@ -4,6 +4,8 @@
  * Portfolio Project - Jairus John Valdez
  */
 
+$page_id = 'home';
+$current_script = 'index.php';
 $page_title = 'Jairus John Valdez | Computer Science & Systems Developer';
 require_once __DIR__ . '/includes/header.php';
 

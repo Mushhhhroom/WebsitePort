@@ -4,6 +4,8 @@
  * Portfolio Project - Jairus John Valdez
  */
 
+$page_id = 'about';
+$current_script = 'about.php';
 $page_title = 'About & Resume | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 

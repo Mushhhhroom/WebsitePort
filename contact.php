@@ -5,6 +5,8 @@
  * Implements CSRF tokens, anti-spam honeypot, input sanitization & validation
  */
 
+$page_id = 'contact';
+$current_script = 'contact.php';
 $page_title = 'Contact & Inquiries | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 

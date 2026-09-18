@@ -5,6 +5,8 @@
  * Compliant with ePrivacy Directive (EU), GDPR, and global consent frameworks.
  */
 
+$page_id = 'cookies';
+$current_script = 'cookies.php';
 $page_title = 'Cookie Policy | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 ?>

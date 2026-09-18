@@ -80,6 +80,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
 }
 
+$page_id = 'login';
+$current_script = 'login.php';
 $page_title = 'Admin Authentication | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
 ?>
