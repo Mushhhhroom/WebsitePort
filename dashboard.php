@@ -126,7 +126,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         // --------------------------------------------------
         elseif ($action === 'toggle_message_read') {
             $id = (int)($_POST['message_id'] ?? 0);
-            $stmt = $pdo->prepare("UPDATE messages SET is_read = NOT is_read WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE messages SET is_read = (CASE WHEN is_read = 1 THEN 0 ELSE 1 END) WHERE id = ?");
             $stmt->execute([$id]);
             $alert = ['type' => 'success', 'message' => 'Message status updated.'];
         }
