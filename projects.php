@@ -46,6 +46,7 @@ foreach ($projects as $p) {
             <div class="search-box">
                 <label for="projectSearch" class="visually-hidden">Search projects by keyword or tech stack</label>
                 <input type="search" id="projectSearch" name="projectSearch" placeholder="🔍 Search tech or title..." aria-label="Search projects by keyword or tech stack" autocomplete="off">
+                <button type="button" id="projectSearchClear" class="search-clear-btn" aria-label="Clear project search" style="display: none;">&times;</button>
             </div>
         </div>
 

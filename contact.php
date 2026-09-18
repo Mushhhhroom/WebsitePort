@@ -175,9 +175,11 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                               rows="5" 
                               required
                               aria-required="true"
-                              aria-labelledby="messageLabel"
                               aria-describedby="messageHelp messageError"><?php echo e($form_data['message']); ?></textarea>
-                    <div id="messageHelp" class="form-help">Protected with prepared statements &amp; CSRF validation.</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                        <div id="messageHelp" class="form-help">Protected with prepared statements &amp; CSRF validation.</div>
+                        <div id="messageCounter" class="form-help" style="font-family: var(--font-mono);">0 / 1000</div>
+                    </div>
                     <div id="messageError" class="field-error" role="alert" aria-live="polite"></div>
                 </div>
 
