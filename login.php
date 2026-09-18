@@ -64,6 +64,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     $_SESSION['user_name']  = $user['full_name'];
                     $_SESSION['logged_at']  = time();
 
+                    // Issue cryptographically signed auth cookie for stateless persistence across Vercel Lambdas
+                    set_auth_cookie($user);
+
                     // Reset failed attempt counters
                     unset($_SESSION['login_attempts'], $_SESSION['last_attempt_time']);
 

@@ -167,6 +167,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 $_SESSION['user_email'] = $email;
 
                 mirror_user_update_to_cloud($user['id'], compact('full_name', 'headline', 'email', 'bio', 'github', 'linkedin'));
+                set_auth_cookie([
+                    'id'        => $user['id'],
+                    'username'  => $user['username'],
+                    'email'     => $email,
+                    'full_name' => $full_name
+                ]);
                 $alert = ['type' => 'success', 'message' => 'Profile updated successfully across both Local MySQL and Supabase Cloud!'];
             }
         }
@@ -194,6 +200,12 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     $up_stmt->execute([$new_hash, $user['id']]);
 
                     mirror_user_update_to_cloud($user['id'], ['password' => $new_hash]);
+                    set_auth_cookie([
+                        'id'        => $user['id'],
+                        'username'  => $user['username'],
+                        'email'     => $user['email'] ?? '',
+                        'full_name' => $user['name'] ?? 'Admin'
+                    ]);
                     $alert = ['type' => 'success', 'message' => 'Password updated securely across both Local MySQL and Supabase Cloud!'];
                 } else {
                     $alert = ['type' => 'error', 'message' => 'Current password entered is incorrect.'];
@@ -380,12 +392,27 @@ require_once __DIR__ . '/includes/header.php';
                                     <td style="font-size: 0.85rem; max-width: 250px;"><?php echo e($p['tech_stack']); ?></td>
                                     <td><?php echo $p['featured'] ? '⭐ Yes' : 'No'; ?></td>
                                     <td>
-                                        <form method="POST" action="dashboard.php" onsubmit="return confirm('Are you sure you want to delete this project?');" style="display: inline;">
-                                            <?php echo csrf_field(); ?>
-                                            <input type="hidden" name="action" value="delete_project">
-                                            <input type="hidden" name="project_id" value="<?php echo (int)$p['id']; ?>">
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                        </form>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <button type="button" 
+                                                    class="btn btn-outline btn-sm btn-edit-project" 
+                                                    data-id="<?php echo (int)$p['id']; ?>"
+                                                    data-title="<?php echo e($p['title']); ?>"
+                                                    data-category="<?php echo e($p['category']); ?>"
+                                                    data-tech="<?php echo e($p['tech_stack']); ?>"
+                                                    data-desc="<?php echo e($p['description']); ?>"
+                                                    data-github="<?php echo e($p['github_link'] ?? ''); ?>"
+                                                    data-demo="<?php echo e($p['demo_link'] ?? ''); ?>"
+                                                    data-featured="<?php echo (int)$p['featured']; ?>"
+                                                    style="padding: 5px 12px; font-size: 0.8rem;">
+                                                ✏️ Edit
+                                            </button>
+                                            <form method="POST" action="dashboard.php" onsubmit="return confirm('Are you sure you want to delete this project?');" style="display: inline; margin: 0;">
+                                                <?php echo csrf_field(); ?>
+                                                <input type="hidden" name="action" value="delete_project">
+                                                <input type="hidden" name="project_id" value="<?php echo (int)$p['id']; ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 5px 12px; font-size: 0.8rem;">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -727,5 +754,123 @@ require_once __DIR__ . '/includes/header.php';
 
     </div>
 </div>
+
+<!-- Edit Project Modal Component -->
+<div id="editProjectModal" class="cookie-modal-backdrop" style="display: none;">
+    <div class="cookie-modal" style="max-width: 720px;" role="dialog" aria-modal="true" aria-labelledby="editProjectModalTitle">
+        <div class="cookie-modal-header">
+            <div>
+                <h2 class="cookie-modal-title" id="editProjectModalTitle">Edit Project</h2>
+                <p class="cookie-modal-subtitle">Update project information in the database</p>
+            </div>
+            <button type="button" class="cookie-modal-close" id="closeEditProjectModalBtn" aria-label="Close dialog">&times;</button>
+        </div>
+        <form method="POST" action="dashboard.php" style="display: flex; flex-direction: column; overflow: hidden; margin: 0;">
+            <div class="cookie-modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="action" value="edit_project">
+                <input type="hidden" name="project_id" id="edit_project_id">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label for="edit_project_title" class="form-label">Project Title *</label>
+                        <input type="text" name="title" id="edit_project_title" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_project_category" class="form-label">Category</label>
+                        <select name="category" id="edit_project_category" class="form-control">
+                            <option value="Web Application">Web Application</option>
+                            <option value="Full Stack">Full Stack</option>
+                            <option value="Full Stack (Mobile & Desktop)">Full Stack (Mobile &amp; Desktop)</option>
+                            <option value="Desktop Application">Desktop Application</option>
+                            <option value="Database System">Database System</option>
+                            <option value="Security & Backend">Security &amp; Backend</option>
+                            <option value="Networking & Systems">Networking &amp; Systems</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit_project_desc" class="form-label">Description *</label>
+                    <textarea name="description" id="edit_project_desc" class="form-control" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="edit_project_tech" class="form-label">Tech Stack (Comma-separated) *</label>
+                    <input type="text" name="tech_stack" id="edit_project_tech" class="form-control" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label for="edit_project_github" class="form-label">GitHub URL</label>
+                        <input type="url" name="github_link" id="edit_project_github" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_project_demo" class="form-label">Live Demo URL</label>
+                        <input type="url" name="demo_link" id="edit_project_demo" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="edit_project_featured" name="featured" value="1" style="width: 18px; height: 18px;">
+                    <label for="edit_project_featured" class="form-label" style="margin-bottom: 0; cursor: pointer;">Highlight on Homepage as Featured Project</label>
+                </div>
+            </div>
+            <div class="cookie-modal-footer">
+                <button type="button" class="btn btn-outline btn-sm" id="cancelEditProjectBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary btn-sm">💾 Update Project</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editModal = document.getElementById('editProjectModal');
+    const closeBtn = document.getElementById('closeEditProjectModalBtn');
+    const cancelBtn = document.getElementById('cancelEditProjectBtn');
+
+    function openEditModal(btn) {
+        if (!editModal) return;
+        document.getElementById('edit_project_id').value = btn.getAttribute('data-id') || '';
+        document.getElementById('edit_project_title').value = btn.getAttribute('data-title') || '';
+        document.getElementById('edit_project_category').value = btn.getAttribute('data-category') || 'Web Application';
+        document.getElementById('edit_project_desc').value = btn.getAttribute('data-desc') || '';
+        document.getElementById('edit_project_tech').value = btn.getAttribute('data-tech') || '';
+        document.getElementById('edit_project_github').value = btn.getAttribute('data-github') || '';
+        document.getElementById('edit_project_demo').value = btn.getAttribute('data-demo') || '';
+        document.getElementById('edit_project_featured').checked = btn.getAttribute('data-featured') === '1';
+
+        editModal.style.display = 'flex';
+        document.body.classList.add('cookie-modal-open');
+    }
+
+    function closeEditModal() {
+        if (!editModal) return;
+        editModal.style.display = 'none';
+        document.body.classList.remove('cookie-modal-open');
+    }
+
+    document.querySelectorAll('.btn-edit-project').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            openEditModal(this);
+        });
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeEditModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeEditModal);
+    if (editModal) {
+        editModal.addEventListener('click', function(e) {
+            if (e.target === editModal) closeEditModal();
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && editModal && editModal.style.display === 'flex') {
+            closeEditModal();
+        }
+    });
+});
+</script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

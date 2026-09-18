@@ -26,6 +26,9 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
+// Clear signed auth cookie
+clear_auth_cookie();
+
 // Destroy session
 session_destroy();
 
