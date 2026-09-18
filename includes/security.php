@@ -45,8 +45,7 @@ function get_auth_secret(): string {
     if (!empty($secret)) {
         return $secret;
     }
-    $db_pass = defined('DB_PASS') ? DB_PASS : (getenv('DB_PASS') ?: '');
-    return hash('sha256', $db_pass . '_portfolio_secure_salt_jairus_2026_!@#');
+    return hash('sha256', 'portfolio_secure_salt_jairus_2026_d9b8a7c6d5e4f3a2b1c0d_!@#');
 }
 
 // 4. Generate Cryptographically Signed Stateless Auth Token
