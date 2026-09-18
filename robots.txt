@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /projects
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+Allow: /cookies
+
+# Disallow admin and setup interfaces
+Disallow: /dashboard*
+Disallow: /login*
+Disallow: /logout*
+Disallow: /sync_db*
+Disallow: /setup*
+Disallow: /config/
+Disallow: /includes/
+Disallow: /api/
