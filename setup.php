@@ -11,11 +11,12 @@ if (file_exists(__DIR__ . '/config/database.php')) {
     require_once __DIR__ . '/config/database.php';
 }
 
-$db_host = defined('DB_HOST') ? DB_HOST : 'localhost';
-$db_port = defined('DB_PORT') ? DB_PORT : '3306';
-$db_user = defined('DB_USER') ? DB_USER : 'root';
-$db_pass = defined('DB_PASS') ? DB_PASS : '';
-$db_name = defined('DB_NAME') ? DB_NAME : 'portfolio';
+$is_local_mysql = (!defined('DB_TYPE') || DB_TYPE === 'mysql');
+$db_host = ($is_local_mysql && defined('DB_HOST')) ? DB_HOST : 'localhost';
+$db_port = ($is_local_mysql && defined('DB_PORT')) ? DB_PORT : '3306';
+$db_user = ($is_local_mysql && defined('DB_USER')) ? DB_USER : 'root';
+$db_pass = ($is_local_mysql && defined('DB_PASS')) ? DB_PASS : '';
+$db_name = ($is_local_mysql && defined('DB_NAME')) ? DB_NAME : 'portfolio';
 
 $messages = [];
 $success = true;
@@ -56,13 +57,21 @@ try {
     $admin = $stmt->fetch();
 
     if ($admin) {
-        $updateStmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+        $updateStmt = $pdo->prepare("
+            UPDATE users 
+            SET password = ?, email = 'Valdez.jairusjohn.deleste@gmail.com', full_name = 'Jairus John D. Valdez',
+                headline = 'Fourth-Year BS Computer Science Student | Website, Application & Mobile Developer'
+            WHERE id = ?
+        ");
         $updateStmt->execute([$admin_hash, $admin['id']]);
-        $messages[] = "Default Admin verified: Username: 'admin' | Email: '{$admin['email']}' | Default Password: '{$default_pass}' (hash refreshed)";
+        $messages[] = "Default Admin verified: Username: 'admin' | Email: 'Valdez.jairusjohn.deleste@gmail.com' | Default Password: '{$default_pass}' (hash refreshed)";
     } else {
         $insertStmt = $pdo->prepare("
-            INSERT INTO users (username, password, email, full_name, headline)
-            VALUES ('admin', ?, 'jairusjohnvaldez@gmail.com', 'Jairus John Valdez', 'Computer Science Student & Systems Developer')
+            INSERT INTO users (username, password, email, full_name, headline, bio, github, linkedin)
+            VALUES ('admin', ?, 'Valdez.jairusjohn.deleste@gmail.com', 'Jairus John D. Valdez', 
+                    'Fourth-Year BS Computer Science Student | Website, Application & Mobile Developer',
+                    'Highly motivated Fourth-Year Bachelor of Science in Computer Science student at Quezon City University. Possesses a strong technical foundation in system troubleshooting and digital platforms, combined with a professional approach to problem-solving.',
+                    'https://github.com/Mushhhhroom', 'https://www.linkedin.com/in/jairus-valdez-19469a313/')
         ");
         $insertStmt->execute([$admin_hash]);
         $messages[] = "Default Admin created: Username: 'admin' | Default Password: '{$default_pass}'";

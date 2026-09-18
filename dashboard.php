@@ -224,7 +224,8 @@ require_once __DIR__ . '/includes/header.php';
                     Logged in as <strong><?php echo e($user['username']); ?></strong> (<?php echo e($profile['full_name'] ?? 'Admin'); ?>)
                 </p>
             </div>
-            <div style="display: flex; gap: 10px;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <a href="sync_db.php" class="btn btn-outline btn-sm" style="border-color: #38bdf8; color: #38bdf8;">🔄 DB Sync</a>
                 <a href="index.php" class="btn btn-outline btn-sm">👁️ View Public Site</a>
                 <a href="logout.php" class="btn btn-danger btn-sm">🚪 Log Out</a>
             </div>
@@ -663,6 +664,37 @@ require_once __DIR__ . '/includes/header.php';
                             Update Password Securely
                         </button>
                     </form>
+                </div>
+
+                <!-- Database Configuration & Sync -->
+                <div class="form-card" style="margin: 0; max-width: 100%; grid-column: 1 / -1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <h3 style="margin: 0;">Database Engine &amp; Cloud Synchronization</h3>
+                        <a href="sync_db.php" class="btn btn-primary btn-sm">Open DB Sync Center &rarr;</a>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px;">
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Active Engine</div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: #38bdf8; margin-top: 4px;">
+                                <?php echo DB_TYPE === 'mysql' ? '🐬 Local MySQL' : '🐘 Supabase PostgreSQL'; ?>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Host &amp; Port</div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">
+                                <?php echo e(DB_HOST . ':' . DB_PORT); ?>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 8px; padding: 14px;">
+                            <div style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Database Name</div>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">
+                                <?php echo e(DB_NAME); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
+                        To switch between Local MySQL and Supabase Cloud, toggle <code>DB_TYPE=mysql</code> or <code>DB_TYPE=pgsql</code> in your <code>.env</code> file. Use the <strong>DB Sync Center</strong> to keep records aligned.
+                    </p>
                 </div>
             </div>
         </div>

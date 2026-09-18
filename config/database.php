@@ -55,32 +55,28 @@ if ($database_url) {
 
 $is_vercel = !empty(getenv('VERCEL')) || !empty(getenv('NOW_REGION'));
 
-// Supabase cloud credentials fallback
-$default_type = $is_vercel ? 'pgsql' : 'mysql';
-$default_host = $is_vercel ? 'aws-0-ap-northeast-2.pooler.supabase.com' : 'localhost';
-$default_port = $is_vercel ? '6543' : '3306';
-$default_name = $is_vercel ? 'postgres' : 'portfolio';
-$default_user = $is_vercel ? 'postgres.rmvsmuwibadtuswbmphq' : 'root';
-$default_pass = $is_vercel ? '09062126799Mushroom_po28' : '';
-
-// Database Driver & Connection Settings
-$db_host = getenv('DB_HOST') ?: $default_host;
-
-// Detect PostgreSQL / Supabase vs MySQL
-$db_type = getenv('DB_TYPE');
-if (!$db_type) {
-    if (str_contains($db_host, 'supabase.co') || str_contains($db_host, 'pooler.supabase.com') || getenv('DB_PORT') == '5432' || getenv('DB_PORT') == '6543') {
-        $db_type = 'pgsql';
-    } else {
-        $db_type = $default_type;
-    }
+// Determine Driver Type: Defaults to 'pgsql' on Vercel, 'mysql' on local development
+$env_db_type = getenv('DB_TYPE');
+if ($env_db_type) {
+    $db_type = strtolower($env_db_type);
+} else {
+    $db_type = $is_vercel ? 'pgsql' : 'mysql';
 }
 
+// Default credentials based on driver type
+$is_pg = ($db_type === 'pgsql');
+
+$default_host = $is_pg ? 'aws-0-ap-northeast-2.pooler.supabase.com' : 'localhost';
+$default_port = $is_pg ? '6543' : '3306';
+$default_name = $is_pg ? 'postgres' : 'portfolio';
+$default_user = $is_pg ? 'postgres.rmvsmuwibadtuswbmphq' : 'root';
+$default_pass = $is_pg ? '09062126799Mushroom_po28' : '';
+
 define('DB_TYPE', $db_type);
-define('DB_HOST', $db_host);
-define('DB_PORT', getenv('DB_PORT') ?: ($db_type === 'pgsql' ? ($is_vercel ? $default_port : '6543') : '3306'));
-define('DB_NAME', getenv('DB_NAME') ?: ($db_type === 'pgsql' ? $default_name : 'portfolio'));
-define('DB_USER', getenv('DB_USER') ?: ($db_type === 'pgsql' ? $default_user : 'root'));
+define('DB_HOST', getenv('DB_HOST') ?: $default_host);
+define('DB_PORT', getenv('DB_PORT') ?: $default_port);
+define('DB_NAME', getenv('DB_NAME') ?: $default_name);
+define('DB_USER', getenv('DB_USER') ?: $default_user);
 define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : $default_pass);
 define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');
 
