@@ -37,17 +37,27 @@ foreach ($all_resume as $item) {
         <!-- Profile Banner -->
         <div style="background: var(--gradient-card); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px; margin-bottom: 50px;">
             <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
-                <div>
-                    <span class="tag-badge tag-badge-green" style="margin-bottom: 12px;">Computer Science Undergraduate</span>
+                    <span class="tag-badge tag-badge-green" style="margin-bottom: 12px;">Fourth-Year BS Computer Science &bull; QCU</span>
                     <h1 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 6px;">
-                        <?php echo e($profile['full_name'] ?? 'Jairus John Valdez'); ?>
+                        <?php echo e($profile['full_name'] ?? 'Jairus John D. Valdez'); ?>
                     </h1>
                     <p style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 1rem; margin-bottom: 12px;">
-                        <?php echo e($profile['headline'] ?? 'Computer Science Student & Systems Developer'); ?>
+                        <?php echo e($profile['headline'] ?? 'Fourth-Year BS Computer Science Student | Website, Application & Mobile Developer'); ?>
                     </p>
-                    <p style="color: var(--text-secondary); max-width: 750px; line-height: 1.7;">
-                        <?php echo e($profile['bio'] ?? 'Dedicated to engineering clean software, mastering algorithms, and upholding security principles.'); ?>
+                    <p style="color: var(--text-secondary); max-width: 750px; line-height: 1.7; margin-bottom: 16px;">
+                        <?php echo e($profile['bio'] ?? ''); ?>
                     </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; font-size: 0.9rem; color: var(--text-muted); font-family: var(--font-mono);">
+                        <span>📍 Caloocan City, PH</span>
+                        <span>&bull;</span>
+                        <a href="tel:+639497844287" style="color: var(--accent-cyan);">📞 +63 949 784 4287</a>
+                        <span>&bull;</span>
+                        <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" style="color: var(--accent-cyan);">✉️ Valdez.jairusjohn.deleste@gmail.com</a>
+                        <span>&bull;</span>
+                        <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" style="color: var(--text-primary);">💻 GitHub</a>
+                        <span>&bull;</span>
+                        <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" style="color: var(--text-primary);">💼 LinkedIn</a>
+                    </div>
                 </div>
                 <div>
                     <a href="contact.php" class="btn btn-primary">Contact Me</a>

@@ -40,7 +40,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
             </h1>
             
             <p class="hero-description">
-                A <strong>Computer Science student</strong> passionate about building reliable software, secure database systems, and robust web applications. Driven by data structures, algorithmic efficiency, and defensive security.
+                Highly motivated <strong>Fourth-Year Bachelor of Science in Computer Science student</strong> at Quezon City University. Strong technical foundation in system troubleshooting, digital platforms, and software engineering across website, application, and mobile development.
             </p>
 
             <div class="hero-actions">
@@ -57,20 +57,20 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 
             <div class="hero-stats">
                 <div class="stat-card">
-                    <div class="stat-num"><?php echo (int)$count_projects; ?>+</div>
-                    <div class="stat-label">Showcase Projects</div>
+                    <div class="stat-num">4th Year</div>
+                    <div class="stat-label">BS Computer Science (QCU)</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-num">BS CS</div>
-                    <div class="stat-label">Computer Science Track</div>
+                    <div class="stat-num">Full-Stack</div>
+                    <div class="stat-label">Web, Mobile &amp; Desktop</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-num">100%</div>
-                    <div class="stat-label">Security Conscious (OWASP)</div>
+                    <div class="stat-num">JPCS</div>
+                    <div class="stat-label">Board of Programmer Officer</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-num">MySQL &amp; PG</div>
-                    <div class="stat-label">Database Management</div>
+                    <div class="stat-num">Multi-DB</div>
+                    <div class="stat-label">MySQL, MongoDB &amp; PG/Supabase</div>
                 </div>
             </div>
         </div>

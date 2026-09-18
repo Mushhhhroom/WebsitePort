@@ -85,10 +85,10 @@ define('DB_PASS', getenv('DB_PASS') !== false ? getenv('DB_PASS') : $default_pas
 define('DB_CHARSET', getenv('DB_CHARSET') ?: 'utf8mb4');
 
 // Site Metadata
-define('SITE_NAME', 'Jairus John Valdez | Portfolio');
-define('OWNER_NAME', 'Jairus John Valdez');
-define('OWNER_ROLE', 'Computer Science Student & Systems Developer');
-define('CONTACT_EMAIL', 'jairusjohnvaldez@gmail.com');
+define('SITE_NAME', 'Jairus John D. Valdez | Portfolio');
+define('OWNER_NAME', 'Jairus John D. Valdez');
+define('OWNER_ROLE', 'Fourth-Year BS Computer Science Student | Website, Application & Mobile Developer');
+define('CONTACT_EMAIL', 'Valdez.jairusjohn.deleste@gmail.com');
 
 // Session & Security
 define('SESSION_LIFETIME', 86400); // 24 hours

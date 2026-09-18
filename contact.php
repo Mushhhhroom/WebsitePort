@@ -158,8 +158,13 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             </form>
         </div>
 
-        <div style="margin-top: 50px; text-align: center; color: var(--text-secondary);">
-            <p>Prefer direct email? Reach me at <a href="mailto:jairusjohnvaldez@gmail.com" style="font-weight: 600;">jairusjohnvaldez@gmail.com</a></p>
+        <div style="margin-top: 50px; text-align: center; color: var(--text-secondary); line-height: 1.8;">
+            <p><strong>Email:</strong> <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" style="font-weight: 600; color: var(--accent-cyan);">Valdez.jairusjohn.deleste@gmail.com</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+639497844287" style="color: var(--text-primary);">+63 949 784 4287</a> &bull; <strong>Location:</strong> Blk. 2 Lot 1 Kasihoa Llano Road, Caloocan City</p>
+            <p style="margin-top: 10px;">
+                <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" style="margin: 0 10px; color: var(--accent-cyan);">GitHub Profile</a> | 
+                <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" style="margin: 0 10px; color: var(--accent-cyan);">LinkedIn Profile</a>
+            </p>
         </div>
     </div>
 </div>
