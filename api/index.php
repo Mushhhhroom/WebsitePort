@@ -14,6 +14,21 @@ if ($clean === '' || $clean === 'index' || $clean === 'index.php') {
     exit;
 }
 
+// Legal route aliases
+$aliases = [
+    'privacy-policy'       => 'privacy.php',
+    'privacy'              => 'privacy.php',
+    'terms'                => 'terms.php',
+    'terms-and-conditions' => 'terms.php',
+    'terms-of-service'     => 'terms.php',
+    'cookie-policy'        => 'cookies.php',
+    'cookies'              => 'cookies.php',
+];
+if (isset($aliases[$clean])) {
+    require __DIR__ . '/../' . $aliases[$clean];
+    exit;
+}
+
 $direct_file = __DIR__ . '/../' . $clean;
 if (file_exists($direct_file) && is_file($direct_file) && str_ends_with($clean, '.php')) {
     require $direct_file;

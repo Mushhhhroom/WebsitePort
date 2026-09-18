@@ -32,22 +32,26 @@ foreach ($projects as $p) {
 
         <!-- Filter & Search Controls -->
         <div class="filter-bar">
-            <div class="filter-pills">
-                <button class="filter-btn active" data-category="all">All Projects (<?php echo count($projects); ?>)</button>
+            <div class="filter-pills" role="tablist" aria-label="Filter projects by category">
+                <button class="filter-btn active" data-category="all" role="tab" aria-selected="true">All Projects (<?php echo count($projects); ?>)</button>
                 <?php foreach ($categories as $cat): ?>
-                    <button class="filter-btn" data-category="<?php echo e($cat); ?>">
+                    <button class="filter-btn" data-category="<?php echo e($cat); ?>" role="tab" aria-selected="false">
                         <?php echo e($cat); ?>
                     </button>
                 <?php endforeach; ?>
             </div>
 
             <div class="search-box">
-                <input type="text" id="projectSearch" placeholder="🔍 Search tech or title..." aria-label="Search projects">
+                <label for="projectSearch" class="visually-hidden">Search projects by keyword or tech stack</label>
+                <input type="search" id="projectSearch" name="projectSearch" placeholder="🔍 Search tech or title..." aria-label="Search projects by keyword or tech stack" autocomplete="off">
             </div>
         </div>
 
+        <!-- Dynamic Screen Reader Live Region for Filter Counts -->
+        <div id="projectSearchStatus" class="visually-hidden" role="status" aria-live="polite"></div>
+
         <!-- Projects Grid -->
-        <div class="projects-grid" id="projectsContainer">
+        <div class="projects-grid" id="projectsContainer" role="region" aria-label="Projects Showcase Grid">
             <?php if (!empty($projects)): ?>
                 <?php foreach ($projects as $proj): ?>
                     <article class="project-card" data-category="<?php echo e($proj['category']); ?>">
@@ -90,7 +94,7 @@ foreach ($projects as $p) {
             <?php endif; ?>
         </div>
 
-        <div id="noProjectsNotice" style="display: none; text-align: center; padding: 40px; color: var(--text-muted);">
+        <div id="noProjectsNotice" style="display: none; text-align: center; padding: 40px; color: var(--text-muted);" role="status" aria-live="polite">
             <p style="font-size: 1.1rem;">No matching projects found for your filter criteria.</p>
         </div>
     </div>

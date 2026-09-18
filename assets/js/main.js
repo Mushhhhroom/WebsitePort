@@ -15,18 +15,31 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!mobileToggle || !navContainer) return;
         mobileToggle.classList.add('is-active');
         mobileToggle.setAttribute('aria-expanded', 'true');
+        mobileToggle.setAttribute('aria-label', 'Close navigation menu');
         navContainer.classList.add('is-open');
         if (navBackdrop) navBackdrop.classList.add('is-visible');
         document.body.classList.add('menu-open');
+
+        // Focus first navigation link
+        setTimeout(() => {
+            const firstLink = navContainer.querySelector('a');
+            if (firstLink) firstLink.focus();
+        }, 50);
     }
 
-    function closeMobileMenu() {
+    function closeMobileMenu(returnFocus = true) {
         if (!mobileToggle || !navContainer) return;
+        const wasOpen = mobileToggle.classList.contains('is-active');
         mobileToggle.classList.remove('is-active');
         mobileToggle.setAttribute('aria-expanded', 'false');
+        mobileToggle.setAttribute('aria-label', 'Open navigation menu');
         navContainer.classList.remove('is-open');
         if (navBackdrop) navBackdrop.classList.remove('is-visible');
         document.body.classList.remove('menu-open');
+
+        if (wasOpen && returnFocus && typeof mobileToggle.focus === 'function') {
+            mobileToggle.focus();
+        }
     }
 
     if (mobileToggle) {
@@ -42,22 +55,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (navBackdrop) {
-        navBackdrop.addEventListener('click', closeMobileMenu);
+        navBackdrop.addEventListener('click', () => closeMobileMenu(true));
     }
 
     // Close mobile menu when clicking any nav link
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
-                closeMobileMenu();
+                closeMobileMenu(false);
             }
         });
     });
 
-    // Close on ESC key
+    // Mobile drawer focus trap & Escape key listener
+    if (navContainer) {
+        navContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMobileMenu(true);
+                return;
+            }
+            if (e.key !== 'Tab') return;
+            const focusables = Array.from(navContainer.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])'));
+            if (focusables.length === 0) return;
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        });
+    }
+
+    // Global Escape Key to close mobile menu
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeMobileMenu();
+        if (e.key === 'Escape' && mobileToggle && mobileToggle.classList.contains('is-active')) {
+            closeMobileMenu(true);
         }
     });
 
@@ -76,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = document.querySelectorAll('.filter-btn');
     const searchInput = document.querySelector('#projectSearch');
     const projectCards = document.querySelectorAll('.project-card');
+    const searchStatus = document.querySelector('#projectSearchStatus');
 
     function filterProjects() {
         const activeBtn = document.querySelector('.filter-btn.active');
@@ -112,13 +153,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emptyNotice) {
             emptyNotice.style.display = visibleCount === 0 ? 'block' : 'none';
         }
+
+        // Dynamic screen reader announcement
+        if (searchStatus) {
+            searchStatus.textContent = `Showing ${visibleCount} of ${projectCards.length} projects.`;
+        }
     }
 
     if (filterButtons.length > 0) {
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
-                filterButtons.forEach(b => b.classList.remove('active'));
+                filterButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
                 filterProjects();
             });
         });
@@ -172,5 +222,132 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => alert.remove(), 500);
             });
         }, 6000);
+    }
+
+    // 6. WCAG 2.1 AA Compliant Client-Side Validation for Contact Form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const messageInput = document.getElementById('message');
+        const consentCheckbox = document.getElementById('privacyConsent');
+
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const messageError = document.getElementById('messageError');
+        const consentError = document.getElementById('consentError');
+
+        function setFieldError(input, errorEl, message) {
+            if (!input || !errorEl) return;
+            input.classList.add('is-invalid');
+            input.setAttribute('aria-invalid', 'true');
+            errorEl.textContent = message;
+            errorEl.classList.add('is-visible');
+        }
+
+        function clearFieldError(input, errorEl) {
+            if (!input || !errorEl) return;
+            input.classList.remove('is-invalid');
+            input.setAttribute('aria-invalid', 'false');
+            errorEl.textContent = '';
+            errorEl.classList.remove('is-visible');
+        }
+
+        function validateName() {
+            if (!nameInput) return true;
+            const val = nameInput.value.trim();
+            if (val.length < 2) {
+                setFieldError(nameInput, nameError, 'Please enter your full name (at least 2 characters).');
+                return false;
+            }
+            clearFieldError(nameInput, nameError);
+            return true;
+        }
+
+        function validateEmail() {
+            if (!emailInput) return true;
+            const val = emailInput.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!val || !emailRegex.test(val)) {
+                setFieldError(emailInput, emailError, 'Please provide a valid email address (e.g. name@domain.com).');
+                return false;
+            }
+            clearFieldError(emailInput, emailError);
+            return true;
+        }
+
+        function validateMessage() {
+            if (!messageInput) return true;
+            const val = messageInput.value.trim();
+            if (val.length < 10) {
+                setFieldError(messageInput, messageError, 'Please write a message of at least 10 characters.');
+                return false;
+            }
+            clearFieldError(messageInput, messageError);
+            return true;
+        }
+
+        function validateConsent() {
+            if (!consentCheckbox) return true;
+            if (!consentCheckbox.checked) {
+                setFieldError(consentCheckbox, consentError, 'You must accept the Privacy Policy before sending a message.');
+                return false;
+            }
+            clearFieldError(consentCheckbox, consentError);
+            return true;
+        }
+
+        // Real-time blur and input listeners
+        if (nameInput) {
+            nameInput.addEventListener('blur', validateName);
+            nameInput.addEventListener('input', () => {
+                if (nameInput.classList.contains('is-invalid')) validateName();
+            });
+        }
+
+        if (emailInput) {
+            emailInput.addEventListener('blur', validateEmail);
+            emailInput.addEventListener('input', () => {
+                if (emailInput.classList.contains('is-invalid')) validateEmail();
+            });
+        }
+
+        if (messageInput) {
+            messageInput.addEventListener('blur', validateMessage);
+            messageInput.addEventListener('input', () => {
+                if (messageInput.classList.contains('is-invalid')) validateMessage();
+            });
+        }
+
+        if (consentCheckbox) {
+            consentCheckbox.addEventListener('change', validateConsent);
+        }
+
+        // Form submission listener
+        contactForm.addEventListener('submit', (e) => {
+            const isNameValid = validateName();
+            const isEmailValid = validateEmail();
+            const isMessageValid = validateMessage();
+            const isConsentValid = validateConsent();
+
+            if (!isNameValid || !isEmailValid || !isMessageValid || !isConsentValid) {
+                e.preventDefault();
+
+                // Focus the first invalid element for screen reader accessibility
+                const firstInvalid = contactForm.querySelector('.is-invalid, [aria-invalid="true"]');
+                if (firstInvalid && typeof firstInvalid.focus === 'function') {
+                    firstInvalid.focus();
+                }
+                return false;
+            }
+
+            // Privacy-gated analytics event dispatch
+            if (window.portfolioAnalytics && typeof window.portfolioAnalytics.trackEvent === 'function') {
+                window.portfolioAnalytics.trackEvent('contact_form_submit', {
+                    category: 'engagement',
+                    timestamp: Date.now()
+                });
+            }
+        });
     }
 });

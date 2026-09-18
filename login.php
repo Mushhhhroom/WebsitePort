@@ -96,20 +96,20 @@ require_once __DIR__ . '/includes/header.php';
             </div>
 
             <?php if ($notice): ?>
-                <div class="alert" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fde68a;">
-                    <span>⚠</span>
+                <div class="alert" style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fde68a;" role="status">
+                    <span aria-hidden="true">⚠</span>
                     <span><?php echo e($notice); ?></span>
                 </div>
             <?php endif; ?>
 
             <?php if ($error_message): ?>
-                <div class="alert alert-error">
-                    <span>✕</span>
+                <div id="loginError" class="alert alert-error" role="alert" aria-live="assertive">
+                    <span aria-hidden="true">✕</span>
                     <span><?php echo e($error_message); ?></span>
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="login.php">
+            <form method="POST" action="login.php" novalidate>
                 <?php echo csrf_field(); ?>
 
                 <div class="form-group">
@@ -121,6 +121,8 @@ require_once __DIR__ . '/includes/header.php';
                            placeholder="Enter username" 
                            autocomplete="username" 
                            required 
+                           aria-required="true"
+                           <?php echo $error_message ? 'aria-invalid="true" aria-describedby="loginError"' : ''; ?>
                            autofocus>
                 </div>
 
@@ -132,7 +134,9 @@ require_once __DIR__ . '/includes/header.php';
                            class="form-control" 
                            placeholder="Enter password" 
                            autocomplete="current-password" 
-                           required>
+                           required
+                           aria-required="true"
+                           <?php echo $error_message ? 'aria-invalid="true"' : ''; ?>>
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">

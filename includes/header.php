@@ -23,15 +23,23 @@ $current_script = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+    <!-- Skip to Main Content Link (WCAG 2.4.1) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <header class="site-header">
         <div class="container navbar">
-            <a href="index.php" class="logo">
-                <span class="logo-badge">&lt;JV /&gt;</span>
+            <a href="index.php" class="logo" aria-label="Jairus Valdez - Home">
+                <span class="logo-badge" aria-hidden="true">&lt;JV /&gt;</span>
                 <span>Jairus Valdez</span>
             </a>
 
-            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation" aria-expanded="false">
-                <span class="hamburger-box">
+            <button class="mobile-toggle" 
+                    id="mobileToggle" 
+                    type="button"
+                    aria-label="Open navigation menu" 
+                    aria-expanded="false" 
+                    aria-controls="navContainer">
+                <span class="hamburger-box" aria-hidden="true">
                     <span class="hamburger-inner"></span>
                 </span>
             </button>
@@ -87,4 +95,4 @@ $current_script = basename($_SERVER['PHP_SELF']);
         </div>
         <div class="nav-backdrop" id="navBackdrop"></div>
     </header>
-    <main>
+    <main id="main-content" tabindex="-1">
