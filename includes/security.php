@@ -19,7 +19,8 @@ function set_security_headers(): void {
 function start_secure_session(): void {
     if (session_status() === PHP_SESSION_NONE) {
         $is_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || 
-                    (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443);
+                    (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443) ||
+                    (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
 
         session_set_cookie_params([
             'lifetime' => 86400,

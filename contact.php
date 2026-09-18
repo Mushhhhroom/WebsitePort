@@ -59,6 +59,10 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 ");
                 $stmt->execute([$name, $email, $subject, $message, $ip]);
 
+                // Automatically mirror inquiry to Supabase Cloud if submitted locally
+                require_once __DIR__ . '/includes/cloud_sync.php';
+                mirror_message_to_cloud(compact('name', 'email', 'subject', 'message', 'ip'));
+
                 $feedback = [
                     'type'    => 'success',
                     'message' => 'Thank you, ' . e($name) . '! Your message has been securely recorded. I will get back to you shortly.'

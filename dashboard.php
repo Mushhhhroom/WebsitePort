@@ -7,6 +7,7 @@
 
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/security.php';
+require_once __DIR__ . '/includes/cloud_sync.php';
 
 // Auth Guard (Redirects before any HTML if not logged in)
 require_login();
@@ -44,7 +45,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     VALUES (?, ?, ?, ?, ?, ?, ?)
                 ");
                 $stmt->execute([$title, $description, $tech_stack, $category, $github_link, $demo_link, $featured]);
-                $alert = ['type' => 'success', 'message' => 'New project added successfully!'];
+                mirror_project_to_cloud('add', compact('title', 'description', 'tech_stack', 'category', 'github_link', 'demo_link', 'featured'));
+                $alert = ['type' => 'success', 'message' => 'New project added successfully and mirrored across databases!'];
             }
         }
 
@@ -70,7 +72,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     WHERE id = ?
                 ");
                 $stmt->execute([$title, $description, $tech_stack, $category, $github_link, $demo_link, $featured, $id]);
-                $alert = ['type' => 'success', 'message' => 'Project updated successfully!'];
+                mirror_project_to_cloud('edit', compact('id', 'title', 'description', 'tech_stack', 'category', 'github_link', 'demo_link', 'featured'));
+                $alert = ['type' => 'success', 'message' => 'Project updated successfully and mirrored across databases!'];
             }
         }
 
@@ -82,7 +85,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if ($id > 0) {
                 $stmt = $pdo->prepare("DELETE FROM projects WHERE id = ?");
                 $stmt->execute([$id]);
-                $alert = ['type' => 'success', 'message' => 'Project removed successfully!'];
+                mirror_project_to_cloud('delete', compact('id'));
+                $alert = ['type' => 'success', 'message' => 'Project removed successfully and mirrored across databases!'];
             }
         }
 
@@ -105,7 +109,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     VALUES (?, ?, ?, ?, ?, ?)
                 ");
                 $stmt->execute([$section, $title, $subtitle, $date_range, $content, $display_order]);
-                $alert = ['type' => 'success', 'message' => 'Resume entry added successfully!'];
+                mirror_resume_to_cloud('add', compact('section', 'title', 'subtitle', 'date_range', 'content', 'display_order'));
+                $alert = ['type' => 'success', 'message' => 'Resume entry added successfully and mirrored across databases!'];
             }
         }
 
@@ -117,7 +122,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if ($id > 0) {
                 $stmt = $pdo->prepare("DELETE FROM resume WHERE id = ?");
                 $stmt->execute([$id]);
-                $alert = ['type' => 'success', 'message' => 'Resume entry deleted successfully!'];
+                mirror_resume_to_cloud('delete', compact('id'));
+                $alert = ['type' => 'success', 'message' => 'Resume entry deleted successfully and mirrored across databases!'];
             }
         }
 
@@ -159,7 +165,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 $stmt->execute([$full_name, $headline, $email, $bio, $github, $linkedin, $user['id']]);
                 $_SESSION['user_name']  = $full_name;
                 $_SESSION['user_email'] = $email;
-                $alert = ['type' => 'success', 'message' => 'Profile updated successfully!'];
+
+                mirror_user_update_to_cloud($user['id'], compact('full_name', 'headline', 'email', 'bio', 'github', 'linkedin'));
+                $alert = ['type' => 'success', 'message' => 'Profile updated successfully across both Local MySQL and Supabase Cloud!'];
             }
         }
 
@@ -184,7 +192,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                     $new_hash = password_hash($new_pw, PASSWORD_DEFAULT);
                     $up_stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
                     $up_stmt->execute([$new_hash, $user['id']]);
-                    $alert = ['type' => 'success', 'message' => 'Password updated securely!'];
+
+                    mirror_user_update_to_cloud($user['id'], ['password' => $new_hash]);
+                    $alert = ['type' => 'success', 'message' => 'Password updated securely across both Local MySQL and Supabase Cloud!'];
                 } else {
                     $alert = ['type' => 'error', 'message' => 'Current password entered is incorrect.'];
                 }
@@ -206,6 +216,8 @@ $unread_count = 0;
 foreach ($messages as $m) {
     if (!$m['is_read']) $unread_count++;
 }
+
+$sync_diff = get_sync_difference($pdo);
 
 $page_title = 'Admin Dashboard | Jairus John Valdez';
 require_once __DIR__ . '/includes/header.php';
@@ -235,6 +247,18 @@ require_once __DIR__ . '/includes/header.php';
             <div class="alert alert-<?php echo e($alert['type']); ?>">
                 <span><?php echo $alert['type'] === 'success' ? '✓' : '⚠'; ?></span>
                 <span><?php echo e($alert['message']); ?></span>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($sync_diff)): ?>
+            <div class="alert" style="background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.4); color: #bae6fd; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 24px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.25rem;">🔄</span>
+                    <div>
+                        <strong>Database Notice:</strong> Differences detected between Local MySQL and Supabase Cloud (e.g. updates on Vercel).
+                    </div>
+                </div>
+                <a href="sync_db.php" class="btn btn-primary btn-sm" style="margin: 0; padding: 6px 14px; font-size: 0.85rem;">Review &amp; Sync Now &rarr;</a>
             </div>
         <?php endif; ?>
 
