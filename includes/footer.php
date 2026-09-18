@@ -23,6 +23,7 @@
                     <li><a href="cookies.php">Cookies</a></li>
                     <li><button type="button" class="footer-btn-link js-cookie-settings-trigger" id="openCookieSettingsBtn" aria-haspopup="dialog">Cookie Preferences</button></li>
                     <li><button type="button" class="footer-btn-link js-system-modal-trigger" aria-haspopup="dialog">⚡ System Telemetry</button></li>
+                    <li><button type="button" class="footer-btn-link js-cmd-palette-trigger" aria-haspopup="dialog">⌘ Command Menu (Ctrl+K)</button></li>
                     <li><a href="contact.php">Contact</a></li>
                     <li><a href="login.php">Admin Portal</a></li>
                 </ul>
@@ -35,6 +36,12 @@
 
     <!-- System Telemetry Modal Component -->
     <?php require_once __DIR__ . '/system_modal.php'; ?>
+
+    <!-- Interactive Command Palette (Ctrl+K) -->
+    <?php require_once __DIR__ . '/command_palette.php'; ?>
+
+    <!-- Interactive Telemetry HUD & Section Spy -->
+    <?php require_once __DIR__ . '/telemetry_hud.php'; ?>
 
     <!-- Mobile Floating Bottom App Dock (Visible on Mobile Screens Only) -->
     <nav class="mobile-dock" aria-label="Quick Mobile Navigation">

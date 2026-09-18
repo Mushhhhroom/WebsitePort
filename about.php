@@ -37,7 +37,7 @@ foreach ($all_resume as $item) {
 <div class="section">
     <div class="container">
         <!-- Profile Banner -->
-        <div class="profile-banner">
+        <div class="profile-banner" id="profileBanner" data-section-name="PROFILE">
             <div class="banner-layout">
                 <div class="banner-info">
                     <span class="tag-badge tag-badge-green" style="margin-bottom: 12px;">Fourth-Year BS Computer Science &bull; QCU</span>
@@ -68,7 +68,7 @@ foreach ($all_resume as $item) {
         </div>
 
         <!-- Section: Education -->
-        <section class="resume-section">
+        <section class="resume-section" id="educationSection" data-section-name="EDUCATION">
             <h2 class="resume-section-title">
                 <span class="icon">🎓</span>
                 <span>Education</span>
@@ -100,7 +100,7 @@ foreach ($all_resume as $item) {
         </section>
 
         <!-- Section: Technical Experience & Academic Projects -->
-        <section class="resume-section">
+        <section class="resume-section" id="experienceSection" data-section-name="EXPERIENCE">
             <h2 class="resume-section-title">
                 <span class="icon">💼</span>
                 <span>Experience &amp; Leadership</span>
@@ -132,7 +132,7 @@ foreach ($all_resume as $item) {
         </section>
 
         <!-- Section: Technical Skills -->
-        <section class="resume-section">
+        <section class="resume-section" id="skillsSection" data-section-name="SKILLS">
             <h2 class="resume-section-title">
                 <span class="icon">⚡</span>
                 <span>Technical Skills Inventory</span>
@@ -161,7 +161,7 @@ foreach ($all_resume as $item) {
         </section>
 
         <!-- Section: Certifications & Coursework -->
-        <section class="resume-section">
+        <section class="resume-section" id="certsSection" data-section-name="CERTS">
             <h2 class="resume-section-title">
                 <span class="icon">📜</span>
                 <span>Certifications &amp; Training</span>

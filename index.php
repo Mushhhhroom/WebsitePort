@@ -29,7 +29,7 @@ $count_resume   = $pdo->query("SELECT COUNT(*) FROM resume")->fetchColumn();
 $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 ?>
 
-<div class="hero">
+<div class="hero" id="heroSection" data-section-name="HERO">
     <div class="container">
         <div class="hero-content">
             <div class="technical-chip">
@@ -114,7 +114,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
     </div>
 </div>
 
-<section class="section">
+<section class="section" id="projectsSection" data-section-name="PROJECTS">
     <div class="container">
         <div class="section-header">
             <div class="section-subtitle">WHAT I BUILD</div>
@@ -176,7 +176,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
     </div>
 </section>
 
-<section class="section" style="background: rgba(17, 24, 39, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+<section class="section" id="skillsSection" data-section-name="SKILLS" style="background: rgba(17, 24, 39, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
     <div class="container">
         <div class="section-header">
             <div class="section-subtitle">CORE COMPETENCIES</div>
@@ -205,7 +205,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
     </div>
 </section>
 
-<section class="section">
+<section class="section" id="contactSection" data-section-name="CONNECT">
     <div class="container">
         <div class="cta-banner">
             <div class="section-subtitle" style="justify-content: center;">LET'S CONNECT</div>

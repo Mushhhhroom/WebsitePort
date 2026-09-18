@@ -22,7 +22,7 @@ foreach ($projects as $p) {
 }
 ?>
 
-<div class="section">
+<div class="section" id="projectsSection" data-section-name="PROJECTS">
     <div class="container">
         <div class="section-header">
             <div class="section-subtitle">PORTFOLIO &amp; LABS</div>

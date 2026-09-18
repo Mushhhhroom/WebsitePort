@@ -420,5 +420,384 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ==========================================================
+    // 8. Web Audio API Micro-Synthesizer (Pure JS, Opt-In)
+    // ==========================================================
+    const SoundEngine = {
+        enabled: false,
+        ctx: null,
+        init() {
+            this.enabled = localStorage.getItem('portfolio_audio_fx') === 'enabled';
+            this.updateIcons();
+        },
+        toggle() {
+            this.enabled = !this.enabled;
+            localStorage.setItem('portfolio_audio_fx', this.enabled ? 'enabled' : 'disabled');
+            this.updateIcons();
+            if (this.enabled) {
+                this.playTone(600, 'sine', 0.06, 0.04);
+                setTimeout(() => this.playTone(900, 'sine', 0.08, 0.05), 50);
+                showHudToast('Audio Haptics: Enabled 🔊', '⚡');
+            } else {
+                showHudToast('Audio Haptics: Muted 🔇', '⚡');
+            }
+            return this.enabled;
+        },
+        updateIcons() {
+            const icons = document.querySelectorAll('.js-audio-icon');
+            const labels = document.querySelectorAll('.js-audio-label');
+            const btns = document.querySelectorAll('.js-audio-toggle-btn');
+            icons.forEach(el => { el.textContent = this.enabled ? '🔊' : '🔇'; });
+            labels.forEach(el => {
+                el.textContent = this.enabled ? 'Toggle Audio Haptics (Active)' : 'Toggle Audio Haptics (Currently Off)';
+            });
+            btns.forEach(btn => {
+                if (this.enabled) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        },
+        playTone(freq, type = 'sine', duration = 0.04, gainVal = 0.02) {
+            if (!this.enabled) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!this.ctx) this.ctx = new AudioCtx();
+                if (this.ctx.state === 'suspended') this.ctx.resume();
+
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            } catch (e) {}
+        },
+        click() { this.playTone(850, 'sine', 0.03, 0.02); },
+        open() {
+            this.playTone(450, 'triangle', 0.05, 0.03);
+            setTimeout(() => this.playTone(720, 'sine', 0.06, 0.03), 40);
+        },
+        close() { this.playTone(380, 'sine', 0.04, 0.02); },
+        success() {
+            this.playTone(523.25, 'sine', 0.05, 0.03);
+            setTimeout(() => this.playTone(659.25, 'sine', 0.05, 0.03), 50);
+            setTimeout(() => this.playTone(783.99, 'sine', 0.08, 0.035), 100);
+        }
+    };
+    SoundEngine.init();
+
+    // Audio toggle listeners
+    document.querySelectorAll('.js-audio-toggle-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            SoundEngine.toggle();
+        });
+    });
+
+    // ==========================================================
+    // 9. Global HUD Toast Notification Dispatcher
+    // ==========================================================
+    let toastTimeout = null;
+    function showHudToast(message, icon = '✓', duration = 2500) {
+        const toast = document.getElementById('hudToast');
+        const msgEl = document.getElementById('hudToastMsg');
+        const iconEl = document.getElementById('hudToastIcon');
+        if (!toast || !msgEl) return;
+
+        if (iconEl) iconEl.textContent = icon;
+        msgEl.textContent = message;
+
+        toast.classList.add('is-active');
+        if (toastTimeout) clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('is-active');
+        }, duration);
+    }
+
+    // ==========================================================
+    // 10. Interactive Command Palette Controller (Ctrl+K)
+    // ==========================================================
+    const cmdPalette = document.getElementById('commandPalette');
+    const cmdSearchInput = document.getElementById('cmdSearchInput');
+    const cmdResultsList = document.getElementById('cmdResultsList');
+    const cmdDismissBtn = document.getElementById('cmdDismissBtn');
+    const cmdEmptyState = document.getElementById('cmdEmptyState');
+    const cmdTriggers = document.querySelectorAll('.js-cmd-palette-trigger');
+
+    let cmdActiveIndex = -1;
+
+    function getVisibleCmdItems() {
+        if (!cmdResultsList) return [];
+        return Array.from(cmdResultsList.querySelectorAll('.cmd-item')).filter(
+            item => item.style.display !== 'none'
+        );
+    }
+
+    function setCmdActiveItem(index) {
+        const items = getVisibleCmdItems();
+        items.forEach(el => el.classList.remove('is-selected'));
+        if (items.length === 0) {
+            cmdActiveIndex = -1;
+            return;
+        }
+        if (index < 0) index = items.length - 1;
+        if (index >= items.length) index = 0;
+        cmdActiveIndex = index;
+        const activeItem = items[cmdActiveIndex];
+        if (activeItem) {
+            activeItem.classList.add('is-selected');
+            activeItem.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+    }
+
+    function openCommandPalette() {
+        if (!cmdPalette) return;
+        SoundEngine.open();
+        if (typeof cmdPalette.showModal === 'function') {
+            cmdPalette.showModal();
+        } else {
+            cmdPalette.setAttribute('open', '');
+        }
+        if (cmdSearchInput) {
+            cmdSearchInput.value = '';
+            filterCommandPalette('');
+            setTimeout(() => cmdSearchInput.focus(), 60);
+        }
+        setCmdActiveItem(0);
+    }
+
+    function closeCommandPalette() {
+        if (!cmdPalette) return;
+        SoundEngine.close();
+        if (typeof cmdPalette.close === 'function') {
+            cmdPalette.close();
+        } else {
+            cmdPalette.removeAttribute('open');
+        }
+    }
+
+    function filterCommandPalette(query) {
+        if (!cmdResultsList) return;
+        const q = query.toLowerCase().trim();
+        const items = cmdResultsList.querySelectorAll('.cmd-item');
+        const groups = cmdResultsList.querySelectorAll('.cmd-group-title');
+        let matchCount = 0;
+
+        items.forEach(item => {
+            const title = (item.querySelector('.cmd-item-title')?.textContent || '').toLowerCase();
+            const desc = (item.querySelector('.cmd-item-desc')?.textContent || '').toLowerCase();
+            const keywords = (item.getAttribute('data-keywords') || '').toLowerCase();
+            const key = (item.getAttribute('data-key') || '').toLowerCase();
+
+            const isMatch = !q || title.includes(q) || desc.includes(q) || keywords.includes(q) || key === q;
+            if (isMatch) {
+                item.style.display = 'flex';
+                matchCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        groups.forEach(group => {
+            let next = group.nextElementSibling;
+            let hasVisible = false;
+            while (next && !next.classList.contains('cmd-group-title')) {
+                if (next.classList.contains('cmd-item') && next.style.display !== 'none') {
+                    hasVisible = true;
+                    break;
+                }
+                next = next.nextElementSibling;
+            }
+            group.style.display = hasVisible ? 'block' : 'none';
+        });
+
+        if (cmdEmptyState) {
+            cmdEmptyState.style.display = matchCount === 0 ? 'block' : 'none';
+        }
+        setCmdActiveItem(0);
+    }
+
+    if (cmdTriggers.length > 0) {
+        cmdTriggers.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openCommandPalette();
+            });
+        });
+    }
+
+    if (cmdDismissBtn) {
+        cmdDismissBtn.addEventListener('click', closeCommandPalette);
+    }
+
+    if (cmdPalette) {
+        cmdPalette.addEventListener('click', (e) => {
+            if (e.target === cmdPalette) closeCommandPalette();
+        });
+        cmdPalette.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCommandPalette();
+        });
+    }
+
+    if (cmdSearchInput) {
+        cmdSearchInput.addEventListener('input', (e) => {
+            filterCommandPalette(e.target.value);
+            SoundEngine.click();
+        });
+
+        cmdSearchInput.addEventListener('keydown', (e) => {
+            const items = getVisibleCmdItems();
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                setCmdActiveItem(cmdActiveIndex + 1);
+                SoundEngine.click();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                setCmdActiveItem(cmdActiveIndex - 1);
+                SoundEngine.click();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const active = items[cmdActiveIndex];
+                if (active) {
+                    active.click();
+                }
+            }
+        });
+    }
+
+    // Command actions execution
+    document.querySelectorAll('.js-cmd-action').forEach(actionBtn => {
+        actionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const action = actionBtn.getAttribute('data-action');
+            closeCommandPalette();
+
+            switch (action) {
+                case 'open-telemetry':
+                    openSystemModal();
+                    break;
+                case 'open-cookies':
+                    const cookieBtn = document.getElementById('openCookieSettingsBtn');
+                    if (cookieBtn) cookieBtn.click();
+                    break;
+                case 'toggle-audio':
+                    SoundEngine.toggle();
+                    break;
+                case 'copy-email':
+                    const email = 'Valdez.jairusjohn.deleste@gmail.com';
+                    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                        navigator.clipboard.writeText(email).then(() => {
+                            SoundEngine.success();
+                            showHudToast('Copied to clipboard: ' + email, '📋');
+                        }).catch(() => {
+                            showHudToast('Email: ' + email, '✉️');
+                        });
+                    } else {
+                        showHudToast('Email: ' + email, '✉️');
+                    }
+                    break;
+                case 'scroll-top':
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    SoundEngine.click();
+                    showHudToast('Viewport centered to summit', '🔝');
+                    break;
+            }
+        });
+    });
+
+    // Global keyboard hotkeys: Ctrl+K / Cmd+K / / / T
+    document.addEventListener('keydown', (e) => {
+        const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+        const isEditing = activeTag === 'input' || activeTag === 'textarea' || document.activeElement?.isContentEditable;
+
+        // Command Palette Toggle: Ctrl+K or Cmd+K
+        if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+            e.preventDefault();
+            if (cmdPalette && cmdPalette.open) {
+                closeCommandPalette();
+            } else {
+                openCommandPalette();
+            }
+            return;
+        }
+
+        if (isEditing) return;
+
+        // Quick Slash / shortcut to open command menu
+        if (e.key === '/') {
+            e.preventDefault();
+            openCommandPalette();
+        }
+
+        // T hotkey to open Telemetry Modal
+        if (e.key === 't' || e.key === 'T') {
+            if (!cmdPalette?.open && !systemModal?.open) {
+                e.preventDefault();
+                openSystemModal();
+            }
+        }
+    });
+
+    // ==========================================================
+    // 11. Telemetry Reading HUD & Section Spy Observer
+    // ==========================================================
+    const hudSectionLabel = document.getElementById('hudSectionLabel');
+    const hudProgressVal = document.getElementById('hudProgressVal');
+    const hudScrollTopBtn = document.getElementById('hudScrollTopBtn');
+
+    function updateScrollTelemetry() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const progress = scrollHeight > 0 ? Math.min(100, Math.max(0, Math.round((scrollTop / scrollHeight) * 100))) : 0;
+
+        if (hudProgressVal) {
+            hudProgressVal.textContent = `${progress}%`;
+        }
+
+        if (hudScrollTopBtn) {
+            if (scrollTop > 240) {
+                hudScrollTopBtn.classList.add('is-visible');
+            } else {
+                hudScrollTopBtn.classList.remove('is-visible');
+            }
+        }
+    }
+
+    window.addEventListener('scroll', updateScrollTelemetry, { passive: true });
+    updateScrollTelemetry();
+
+    if (hudScrollTopBtn) {
+        hudScrollTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            SoundEngine.click();
+        });
+    }
+
+    // Section Spy Observer
+    const trackedSections = document.querySelectorAll('[data-section-name]');
+    if (trackedSections.length > 0 && 'IntersectionObserver' in window) {
+        const spyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && hudSectionLabel) {
+                    const secName = entry.target.getAttribute('data-section-name');
+                    if (secName) {
+                        hudSectionLabel.textContent = `LOC // ${secName}`;
+                    }
+                }
+            });
+        }, {
+            rootMargin: '-20% 0px -60% 0px',
+            threshold: 0
+        });
+
+        trackedSections.forEach(sec => spyObserver.observe(sec));
+    }
 });
+
 

@@ -91,7 +91,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 }
 ?>
 
-<div class="section">
+<div class="section" id="contactSection" data-section-name="CONTACT">
     <div class="container">
         <div class="section-header" style="text-align: center; max-width: 650px; margin: 0 auto 40px auto;">
             <div class="section-subtitle" style="justify-content: center;">GET IN TOUCH</div>
