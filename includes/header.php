@@ -86,13 +86,6 @@ $current_script = ($page_id === 'home') ? 'index.php' : ($page_id . '.php');
                         </a>
                     </li>
                     <li>
-                        <button type="button" class="nav-cmd-trigger js-cmd-palette-trigger" aria-haspopup="dialog" aria-label="Open Command Menu (Ctrl+K)" title="Command Menu (Ctrl+K)">
-                            <span class="cmd-icon" aria-hidden="true">⌘</span>
-                            <span class="cmd-label">Actions</span>
-                            <kbd class="cmd-kbd">Ctrl+K</kbd>
-                        </button>
-                    </li>
-                    <li>
                         <button type="button" class="nav-btn-telemetry js-system-modal-trigger" aria-haspopup="dialog" aria-label="Open System Architecture and Telemetry Console">
                             <span>⚡ Telemetry</span>
                         </button>

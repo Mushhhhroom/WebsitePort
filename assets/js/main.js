@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileToggle = document.getElementById('mobileToggle') || document.querySelector('.mobile-toggle');
     const navContainer = document.getElementById('navContainer') || document.querySelector('.nav-container');
     const navBackdrop = document.getElementById('navBackdrop') || document.querySelector('.nav-backdrop');
-    const navLinks = document.querySelectorAll('.nav-link, .nav-btn-admin, .nav-btn-telemetry, .nav-cmd-trigger');
+    const navLinks = document.querySelectorAll('.nav-link, .nav-btn-admin, .nav-btn-telemetry');
     const siteHeader = document.querySelector('.site-header');
 
     function openMobileMenu() {
