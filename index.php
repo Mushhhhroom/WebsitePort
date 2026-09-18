@@ -31,8 +31,11 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
     <div class="container">
         <div class="hero-content">
             <div class="hero-kicker">
-                <span class="pulse-dot"></span>
-                <span>Open for Technical Roles &amp; Collaborations</span>
+                <span class="pulse-indicator">
+                    <span class="ping-ring"></span>
+                    <span class="dot"></span>
+                </span>
+                <span>Open for Technical Roles &amp; Opportunities</span>
             </div>
             
             <h1 class="hero-title">
@@ -45,7 +48,8 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 
             <div class="hero-actions">
                 <a href="projects.php" class="btn btn-primary">
-                    <span>View Projects</span> &rarr;
+                    <span>View Projects</span>
+                    <span class="btn-arrow">&rarr;</span>
                 </a>
                 <a href="about.php" class="btn btn-outline">
                     <span>Resume &amp; Experience</span>
@@ -53,6 +57,21 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
                 <a href="contact.php" class="btn btn-outline">
                     <span>Get in Touch</span>
                 </a>
+            </div>
+
+            <div class="hero-quick-links">
+                <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" class="quick-chip">
+                    <span>💻 GitHub Profile</span>
+                </a>
+                <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" class="quick-chip">
+                    <span>💼 LinkedIn Profile</span>
+                </a>
+                <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" class="quick-chip">
+                    <span>✉️ Email Contact</span>
+                </a>
+                <span class="quick-chip">
+                    <span>📍 Caloocan City, PH</span>
+                </span>
             </div>
 
             <div class="hero-stats">
@@ -70,7 +89,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
                 </div>
                 <div class="stat-card">
                     <div class="stat-num">Multi-DB</div>
-                    <div class="stat-label">MySQL, MongoDB &amp; PG/Supabase</div>
+                    <div class="stat-label">MySQL, MongoDB &amp; Supabase</div>
                 </div>
             </div>
         </div>
@@ -80,7 +99,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 <section class="section">
     <div class="container">
         <div class="section-header">
-            <div class="section-subtitle">// WHAT I BUILD</div>
+            <div class="section-subtitle">WHAT I BUILD</div>
             <h2 class="section-title">Featured Projects</h2>
             <p class="section-desc">
                 A selection of systems, web portals, and database projects crafted with an emphasis on performance and security.
@@ -94,7 +113,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
                         <div class="project-meta">
                             <span class="project-category"><?php echo e($proj['category']); ?></span>
                             <?php if ($proj['featured']): ?>
-                                <span class="featured-badge">Featured</span>
+                                <span class="featured-badge">★ Featured</span>
                             <?php endif; ?>
                         </div>
 
@@ -131,7 +150,10 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
         </div>
 
         <div style="margin-top: 40px; text-align: center;">
-            <a href="projects.php" class="btn btn-outline">View All <?php echo (int)$count_projects; ?> Projects &rarr;</a>
+            <a href="projects.php" class="btn btn-outline">
+                <span>View All <?php echo (int)$count_projects; ?> Projects</span>
+                <span class="btn-arrow">&rarr;</span>
+            </a>
         </div>
     </div>
 </section>
@@ -139,7 +161,7 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 <section class="section" style="background: rgba(17, 24, 39, 0.4); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
     <div class="container">
         <div class="section-header">
-            <div class="section-subtitle">// CORE COMPETENCIES</div>
+            <div class="section-subtitle">CORE COMPETENCIES</div>
             <h2 class="section-title">Technical Skills &amp; Focus</h2>
             <p class="section-desc">Practical systems development combined with foundational computer science theory.</p>
         </div>
@@ -166,13 +188,23 @@ $count_messages = $pdo->query("SELECT COUNT(*) FROM messages")->fetchColumn();
 </section>
 
 <section class="section">
-    <div class="container" style="text-align: center; max-width: 700px;">
-        <div class="section-subtitle">// LET'S CONNECT</div>
-        <h2 class="section-title" style="margin-bottom: 16px;">Have a project or opportunity?</h2>
-        <p class="section-desc" style="margin: 0 auto 30px auto;">
-            I am always eager to learn, contribute to challenging software projects, and collaborate with teams building impactful technology.
-        </p>
-        <a href="contact.php" class="btn btn-primary">Send Me a Message</a>
+    <div class="container">
+        <div class="cta-banner">
+            <div class="section-subtitle" style="justify-content: center;">LET'S CONNECT</div>
+            <h2 class="section-title" style="margin-bottom: 16px;">Have a project or opportunity in mind?</h2>
+            <p class="section-desc" style="margin: 0 auto 32px auto; max-width: 600px;">
+                I am always eager to learn, contribute to challenging software systems, and collaborate with teams building impactful technology.
+            </p>
+            <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                <a href="contact.php" class="btn btn-primary">
+                    <span>Send Me a Message</span>
+                    <span class="btn-arrow">&rarr;</span>
+                </a>
+                <a href="about.php" class="btn btn-outline">
+                    <span>View Complete Resume</span>
+                </a>
+            </div>
+        </div>
     </div>
 </section>
 

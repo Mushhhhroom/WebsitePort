@@ -23,7 +23,7 @@ foreach ($projects as $p) {
 <div class="section">
     <div class="container">
         <div class="section-header">
-            <div class="section-subtitle">// PORTFOLIO &amp; LABS</div>
+            <div class="section-subtitle">PORTFOLIO &amp; LABS</div>
             <h1 class="section-title">Projects &amp; Systems Showcase</h1>
             <p class="section-desc">
                 Exploration of web architectures, database design, backend services, and network infrastructure. Built to solve real problems with secure coding practices.

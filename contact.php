@@ -84,7 +84,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 <div class="section">
     <div class="container">
         <div class="section-header" style="text-align: center; max-width: 650px; margin: 0 auto 40px auto;">
-            <div class="section-subtitle">// GET IN TOUCH</div>
+            <div class="section-subtitle" style="justify-content: center;">GET IN TOUCH</div>
             <h1 class="section-title">Send a Message</h1>
             <p class="section-desc" style="margin: 0 auto;">
                 Have a question about a project, an internship opportunity, or want to discuss systems architecture? Feel free to reach out.
@@ -158,13 +158,15 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             </form>
         </div>
 
-        <div style="margin-top: 50px; text-align: center; color: var(--text-secondary); line-height: 1.8;">
-            <p><strong>Email:</strong> <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" style="font-weight: 600; color: var(--accent-cyan);">Valdez.jairusjohn.deleste@gmail.com</a></p>
-            <p><strong>Phone:</strong> <a href="tel:+639497844287" style="color: var(--text-primary);">+63 949 784 4287</a> &bull; <strong>Location:</strong> Blk. 2 Lot 1 Kasihoa Llano Road, Caloocan City</p>
-            <p style="margin-top: 10px;">
-                <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" style="margin: 0 10px; color: var(--accent-cyan);">GitHub Profile</a> | 
-                <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" style="margin: 0 10px; color: var(--accent-cyan);">LinkedIn Profile</a>
-            </p>
+        <div style="margin-top: 50px; text-align: center; max-width: 680px; margin-left: auto; margin-right: auto;">
+            <div class="section-subtitle" style="justify-content: center; margin-bottom: 16px;">DIRECT CHANNELS</div>
+            <div class="contact-chips" style="justify-content: center;">
+                <a href="mailto:Valdez.jairusjohn.deleste@gmail.com" class="chip-item chip-link">✉️ Valdez.jairusjohn.deleste@gmail.com</a>
+                <a href="tel:+639497844287" class="chip-item chip-link">📞 +63 949 784 4287</a>
+                <span class="chip-item">📍 Caloocan City, PH</span>
+                <a href="https://github.com/Mushhhhroom" target="_blank" rel="noopener noreferrer" class="chip-item chip-link">💻 GitHub Profile</a>
+                <a href="https://www.linkedin.com/in/jairus-valdez-19469a313/" target="_blank" rel="noopener noreferrer" class="chip-item chip-link">💼 LinkedIn Profile</a>
+            </div>
         </div>
     </div>
 </div>
