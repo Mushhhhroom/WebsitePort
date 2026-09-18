@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 992) {
                 closeMobileMenu(false);
             }
         });
